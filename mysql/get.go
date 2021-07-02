@@ -9,10 +9,11 @@ import (
 const GetOrdersSQL = `
 select json_object(
 	'order_id', t2.order_id,
+	'status_id', t2.status_id,
 	'status', t3.name,
-	'createdAt', t2.createdAt)
+	'createdAt', UNIX_TIMESTAMP(t2.createdAt))
 from orders as t2 
-inner join status as t3 on t2.status_id=t3.status_id where t2.user_id=?
+inner join status as t3 on t2.status_id=t3.status_id where t2.user_id=? order by t2.createdAt desc
 `
 
 func (w *Worker) GetOrders(params []interface{}) (string, error) {
@@ -49,9 +50,10 @@ select json_object(
 	'product_id', t1.product_id,
 	'product_name', t1.name,
 	'price', t1.price,
+	'category_id', t2.category_id,
 	'category', t2.name
 ) from products t1
-inner join categories t2 on t1.category_id=t2.category_id
+inner join categories t2 on t1.category_id=t2.category_id order by t1.product_id
 `
 
 func (w *Worker) GetProducts(params []interface{}) (string, error) {
@@ -91,7 +93,7 @@ select json_object(
 ) from products t1
 inner join categories t2 on t1.category_id=t2.category_id
 inner join order_products t3 on t3.product_id=t1.product_id
-inner join orders t4 on t4.order_id=t3.order_id where t3.order_id=? and t4.user_id=?
+inner join orders t4 on t4.order_id=t3.order_id where t3.order_id=? and t4.user_id=? order by t1.product_id
 `
 
 func (w *Worker) GetOrderProducts(params []interface{}) (string, error) {

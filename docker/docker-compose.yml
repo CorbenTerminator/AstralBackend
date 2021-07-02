@@ -33,7 +33,7 @@ services:
       - http_server
     volumes:
       - './nginx.conf:/etc/nginx/conf.d/default.conf'
-      - './www:/home/www'      
+      - './www:/var/www'      
 
 volumes:
   data_mysql: null      

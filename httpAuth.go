@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"time"
 
@@ -18,6 +19,19 @@ var jwtKey = []byte("Secret_Key_Shop")
 type Claims struct {
 	UserID string `json:"userID"`
 	jwt.StandardClaims
+}
+
+func Welcome(w http.ResponseWriter, r *http.Request) {
+	// 	log.Println("Welcome")
+	// 	credets := &mysql.User{}
+	// 	err := json.NewDecoder(r.Body).Decode(&credets)
+	// 	log.Printf("%+v", credets)
+	// 	if err != nil {
+	// 		http.Error(w, "Wrong JSON", http.StatusBadRequest)
+	// 		return
+	// 	}
+	// 	json, _ := json.Marshal(map[string]string{"token": "userToken123"})
+	// 	fmt.Fprintf(w, string(json))
 }
 
 func AuthCheck(next http.HandlerFunc) http.HandlerFunc {
@@ -58,14 +72,16 @@ func AuthCheck(next http.HandlerFunc) http.HandlerFunc {
 }
 
 func SignIn(w http.ResponseWriter, r *http.Request) {
+	log.Println("SignIn")
 	credets := &mysql.User{}
 	err := json.NewDecoder(r.Body).Decode(&credets)
+	log.Printf("%+v", credets)
 	if err != nil {
 		http.Error(w, "Wrong JSON", http.StatusBadRequest)
 		return
 	}
 	//get password hash by login in DB
-	user_id, password, err := db.GetUserByLogin([]interface{}{credets.Login})
+	userID, password, err := db.GetUserByLogin([]interface{}{credets.Login})
 	if err != nil {
 		http.Error(w, "Database error", http.StatusInternalServerError)
 		return
@@ -81,7 +97,7 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//if the password is valid then generate JWT-Token
-	token, expTime, err := GenerateJWTToken(user_id)
+	token, expTime, err := GenerateJWTToken(userID)
 	if err != nil {
 		http.Error(w, "Token error", http.StatusInternalServerError)
 		return
@@ -105,7 +121,7 @@ func CheckPasswordHash(password, hash string) bool {
 }
 
 func GenerateJWTToken(user_id string) (string, time.Time, error) {
-	expirationTime := time.Now().Add(30 * time.Minute)
+	expirationTime := time.Now().Add(60 * time.Minute)
 	claims := &Claims{
 		UserID: user_id,
 		StandardClaims: jwt.StandardClaims{
