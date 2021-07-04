@@ -1,4 +1,4 @@
-module AstralTest
+module AstralBackend
 
 go 1.15
 
@@ -10,3 +10,4 @@ require (
 	github.com/mailru/easyjson v0.7.7
 	golang.org/x/crypto v0.0.0-20210616213533-5ff15b29337e
 )
+

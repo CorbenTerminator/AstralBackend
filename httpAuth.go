@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	mysql "./mysql"
+	mysql "AstralBackend/mysql"
 
 	gorillactx "github.com/gorilla/context"
 

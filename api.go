@@ -9,10 +9,10 @@ import (
 func GetHandler() http.Handler {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/welcome", Welcome).Methods("POST")
+	// r.HandleFunc("/welcome", Welcome).Methods("POST")
 
 	//login and get jwt-token in cookie
-	r.HandleFunc("/login", SignIn).Methods("POST")
+	r.HandleFunc("/api/login", SignIn).Methods("POST")
 
 	// r.HandleFunc("/api/refresh", RefreshToken).Methods("GET")
 

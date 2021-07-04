@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	mysql "./mysql"
+	mysql "AstralBackend/mysql"
 )
 
 const (
