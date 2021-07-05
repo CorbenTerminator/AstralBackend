@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	dbConn = "user:user1234@tcp(mysql:3306)/shop?parseTime=true"
+	dbConn = "user:user1234@tcp(astral_mysql:3306)/shop?parseTime=true"
 )
 
 var db *mysql.Worker
